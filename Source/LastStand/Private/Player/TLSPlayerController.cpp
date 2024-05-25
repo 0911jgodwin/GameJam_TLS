@@ -16,8 +16,10 @@ void ATLSPlayerController::BeginPlay()
 	check(TLSContext);
 
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);
-	Subsystem->AddMappingContext(TLSContext, 0);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(TLSContext, 0);
+	}
 
 	bShowMouseCursor = true;
 	DefaultMouseCursor = EMouseCursor::Default;

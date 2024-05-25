@@ -1,21 +1,21 @@
 // Copyright JGodwin
 
 
-#include "Character/TLSEnemy.h"
+#include "Player/TLSPlayerState.h"
 #include "AbilitySystem/TLSAbilitySystemComponent.h"
 #include "AbilitySystem/TLSAttributeSet.h"
 
-ATLSEnemy::ATLSEnemy()
+ATLSPlayerState::ATLSPlayerState()
 {
 	AbilitySystemComponent = CreateDefaultSubobject<UTLSAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Minimal);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 
 	AttributeSet = CreateDefaultSubobject<UTLSAttributeSet>("AttributeSet");
+	NetUpdateFrequency = 100.f;
 }
 
-void ATLSEnemy::BeginPlay()
+UAbilitySystemComponent* ATLSPlayerState::GetAbilitySystemComponent() const
 {
-	Super::BeginPlay();
-	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	return AbilitySystemComponent;
 }

@@ -15,4 +15,8 @@ class LASTSTAND_API ATLSCharacter : public ATLSCharacterBase
 	GENERATED_BODY()
 public:
 	ATLSCharacter();
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void OnRep_PlayerState() override;
+private:
+	void InitAbilityActorInfo();
 };

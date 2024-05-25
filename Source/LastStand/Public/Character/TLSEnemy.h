@@ -13,5 +13,8 @@ UCLASS()
 class LASTSTAND_API ATLSEnemy : public ATLSCharacterBase
 {
 	GENERATED_BODY()
-	
+public:
+	ATLSEnemy();
+protected:
+	virtual void BeginPlay() override;
 };
