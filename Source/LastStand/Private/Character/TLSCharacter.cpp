@@ -35,6 +35,14 @@ void ATLSCharacter::OnRep_PlayerState()
 
 	// Init ability actor info for the Client
 	InitAbilityActorInfo();
+
+	//Broadcast the Abilities Given Delegate
+	UTLSAbilitySystemComponent* ASC = Cast<UTLSAbilitySystemComponent>(AbilitySystemComponent);
+	if (!ASC->bStartupAbilitiesGiven)
+	{
+		ASC->bStartupAbilitiesGiven = true;
+		ASC->AbilitiesGivenDelegate.Broadcast(ASC);
+	}
 }
 
 void ATLSCharacter::InitAbilityActorInfo()

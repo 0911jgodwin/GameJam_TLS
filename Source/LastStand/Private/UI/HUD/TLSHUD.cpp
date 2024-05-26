@@ -12,7 +12,6 @@ UOverlayWidgetController* ATLSHUD::GetOverlayWidgetController(const FWidgetContr
 		OverlayWidgetController = NewObject<UOverlayWidgetController>(this, OverlayWidgetControllerClass);
 		OverlayWidgetController->SetWidgetControllerParams(WCParams);
 		OverlayWidgetController->BindCallbacksToDependencies();
-		return OverlayWidgetController;
 	}
 	return OverlayWidgetController;
 }
@@ -32,5 +31,3 @@ void ATLSHUD::InitOverlay(APlayerController* PC, APlayerState* PS, UAbilitySyste
 	WidgetController->BroadcastInitialValues();
 	Widget->AddToViewport();
 }
-
-

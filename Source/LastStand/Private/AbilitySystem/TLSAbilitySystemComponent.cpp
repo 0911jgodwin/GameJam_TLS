@@ -98,11 +98,12 @@ void UTLSAbilitySystemComponent::OnRep_ActivateAbilities()
 {
 	Super::OnRep_ActivateAbilities();
 
-	if (!bStartupAbilitiesGiven)
+	// Getting called before HUD loads, opted to handle this is TLSCharacter instead
+	/*if (!bStartupAbilitiesGiven)
 	{
 		bStartupAbilitiesGiven = true;
 		AbilitiesGivenDelegate.Broadcast(this);
-	}
+	}*/
 }
 
 void UTLSAbilitySystemComponent::ClientEffectApplied_Implementation(UAbilitySystemComponent* AbilitySystemComponent,
