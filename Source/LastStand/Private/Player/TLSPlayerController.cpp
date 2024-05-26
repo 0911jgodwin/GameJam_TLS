@@ -1,9 +1,10 @@
 // Copyright JGodwin
 
-
 #include "Player/TLSPlayerController.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystem/TLSAbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
+#include "Input/TLSInputComponent.h"
 
 ATLSPlayerController::ATLSPlayerController()
 {
@@ -34,9 +35,9 @@ void ATLSPlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
-
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATLSPlayerController::Move);
+	UTLSInputComponent* TLSInputComponent = CastChecked<UTLSInputComponent>(InputComponent);
+	TLSInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATLSPlayerController::Move);
+	TLSInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed, &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 }
 
 void ATLSPlayerController::Move(const FInputActionValue& InputActionValue)
@@ -53,4 +54,29 @@ void ATLSPlayerController::Move(const FInputActionValue& InputActionValue)
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
 	}
+}
+
+void ATLSPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
+{
+}
+
+void ATLSPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagReleased(InputTag);
+}
+
+void ATLSPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
+{
+	if (GetASC() == nullptr) return;
+	GetASC()->AbilityInputTagHeld(InputTag);
+}
+
+UTLSAbilitySystemComponent* ATLSPlayerController::GetASC()
+{
+	if (TLSAbilitySystemComponent == nullptr)
+	{
+		TLSAbilitySystemComponent = Cast<UTLSAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn<APawn>()));
+	}
+	return TLSAbilitySystemComponent;
 }

@@ -17,5 +17,11 @@ ATLSEnemy::ATLSEnemy()
 void ATLSEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	InitAbilityActorInfo();
+}
+
+void ATLSEnemy::InitAbilityActorInfo()
+{
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	Cast<UTLSAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
 }

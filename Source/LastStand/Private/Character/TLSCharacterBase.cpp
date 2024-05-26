@@ -2,6 +2,8 @@
 
 
 #include "Character/TLSCharacterBase.h"
+#include "AbilitySystemComponent.h"
+#include "AbilitySystem/TLSAbilitySystemComponent.h"
 
 
 ATLSCharacterBase::ATLSCharacterBase()
@@ -21,5 +23,16 @@ UAbilitySystemComponent* ATLSCharacterBase::GetAbilitySystemComponent() const
 void ATLSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+}
+
+void ATLSCharacterBase::InitAbilityActorInfo()
+{
+}
+
+void ATLSCharacterBase::AddCharacterAbilities()
+{
+	UTLSAbilitySystemComponent* TLSASC = CastChecked<UTLSAbilitySystemComponent>(AbilitySystemComponent);
+	if (!HasAuthority()) return;
+
+	TLSASC->AddCharacterAbilities(StartupAbilities);
 }

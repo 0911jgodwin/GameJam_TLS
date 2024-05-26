@@ -4,6 +4,7 @@
 #include "Character/TLSCharacter.h"
 #include "AbilitySystemComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystem/TLSAbilitySystemComponent.h"
 #include "Player/TLSPlayerController.h"
 #include "Player/TLSPlayerState.h"
 #include "UI/HUD/TLSHUD.h"
@@ -25,6 +26,7 @@ void ATLSCharacter::PossessedBy(AController* NewController)
 
 	// Init ability actor info for the Server
 	InitAbilityActorInfo();
+	AddCharacterAbilities();
 }
 
 void ATLSCharacter::OnRep_PlayerState()
@@ -40,6 +42,7 @@ void ATLSCharacter::InitAbilityActorInfo()
 	ATLSPlayerState* TLSPlayerState = GetPlayerState<ATLSPlayerState>();
 	check(TLSPlayerState);
 	TLSPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(TLSPlayerState, this);
+	Cast<UTLSAbilitySystemComponent>(TLSPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	AbilitySystemComponent = TLSPlayerState->GetAbilitySystemComponent();
 	AttributeSet = TLSPlayerState->GetAttributeSet();
 
