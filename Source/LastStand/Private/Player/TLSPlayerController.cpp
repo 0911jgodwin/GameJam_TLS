@@ -5,10 +5,17 @@
 #include "AbilitySystem/TLSAbilitySystemComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Input/TLSInputComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ATLSPlayerController::ATLSPlayerController()
 {
 	bReplicates = true;
+}
+
+void ATLSPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+	Look();
 }
 
 void ATLSPlayerController::BeginPlay()
@@ -43,7 +50,8 @@ void ATLSPlayerController::SetupInputComponent()
 void ATLSPlayerController::Move(const FInputActionValue& InputActionValue)
 {
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
-	const FRotator Rotation = GetControlRotation();
+	//const FRotator Rotation = GetControlRotation();
+	const FRotator Rotation = PlayerCameraManager->GetCameraRotation();
 	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
@@ -53,6 +61,24 @@ void ATLSPlayerController::Move(const FInputActionValue& InputActionValue)
 	{
 		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
 		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
+	}
+}
+
+void ATLSPlayerController::Look()
+{
+	
+	if (APawn* ControlledPawn = GetPawn<APawn>())
+	{
+		FVector MouseLocation, MouseDirection;
+		DeprojectMousePositionToWorld(MouseLocation, MouseDirection);
+		FVector3d ActorLoc = ControlledPawn->GetActorLocation();
+		FVector3d ActorFloor = FVector3d(ActorLoc.X, ActorLoc.Y, ActorLoc.Z-88);
+		MouseDirection = MouseDirection * 1000000;
+		FVector3d Intersection = FMath::LinePlaneIntersection(MouseLocation, MouseDirection, ActorFloor, FVector3d(0,0,1));
+		ActorLoc.Z = 0;
+		Intersection.Z = 0;
+		FRotator LookAtDirection = UKismetMathLibrary::FindLookAtRotation(ActorLoc, Intersection);
+		SetControlRotation(LookAtDirection);
 	}
 }
 

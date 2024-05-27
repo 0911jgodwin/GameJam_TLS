@@ -21,7 +21,7 @@ class LASTSTAND_API ATLSPlayerController : public APlayerController
 	GENERATED_BODY()
 public:
 	ATLSPlayerController();
-	//virtual void PlayerTick(float DeltaTime) override;
+	virtual void PlayerTick(float DeltaTime) override;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -34,6 +34,7 @@ private:
 	TObjectPtr<UInputAction> MoveAction;
 
 	void Move(const FInputActionValue& InputActionValue);
+	void Look();
 
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
