@@ -35,7 +35,7 @@ void UTLSProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocatio
 
 	const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
 	const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
-	Projectile->IgnoreTag = GetAvatarActorFromActorInfo()->ActorHasTag("Friendly") ? "Friendly" : "Enemy";
+	Projectile->SourceAbilitySystemComponent = GetAbilitySystemComponentFromActorInfo();
 	Projectile->DamageEffectSpecHandle = SpecHandle;
 	Projectile->FinishSpawning(SpawnTransform);
 }

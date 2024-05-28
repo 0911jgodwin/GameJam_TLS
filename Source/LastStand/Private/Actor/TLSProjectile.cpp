@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/TLSAbilitySystemLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "LastStand/LastStand.h"
 
@@ -36,6 +37,12 @@ void ATLSProjectile::BeginPlay()
 	Sphere->OnComponentBeginOverlap.AddDynamic(this, &ATLSProjectile::OnSphereOverlap);
 }
 
+void ATLSProjectile::OnHit()
+{
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+	bHit = true;
+}
+
 void ATLSProjectile::Destroyed()
 {
 	if (!bHit && !HasAuthority())
@@ -48,21 +55,25 @@ void ATLSProjectile::Destroyed()
 void ATLSProjectile::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                      UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (!OtherActor->ActorHasTag(IgnoreTag))
-	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, ImpactEffect, GetActorLocation());
+	if (!IsValidOverlap(OtherActor)) return;
+	if (!bHit) OnHit();
 
-		if (HasAuthority())
+	if (HasAuthority())
+	{
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
 		{
-			if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(OtherActor))
-			{
-				TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
-			}
-			Destroy();
+			TargetASC->ApplyGameplayEffectSpecToSelf(*DamageEffectSpecHandle.Data.Get());
 		}
-		else
-		{
-			bHit = true;
-		}
+		Destroy();
 	}
+	else bHit = true;
+}
+
+bool ATLSProjectile::IsValidOverlap(AActor* OtherActor)
+{
+	if (SourceAbilitySystemComponent == nullptr) return false;
+	AActor* SourceAvatarActor = SourceAbilitySystemComponent->GetAvatarActor();
+	if (SourceAvatarActor == OtherActor) return false;
+	if (!UTLSAbilitySystemLibrary::IsNotFriend(SourceAvatarActor, OtherActor)) return false;
+	return true;
 }
