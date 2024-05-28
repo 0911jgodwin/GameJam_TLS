@@ -16,7 +16,13 @@ void UTLSBlinkSpell::BlinkCharacter(const FVector& BlinkDirection, const float& 
 	if (!bIsServer) return;
 	
 	const FVector StartLocation = GetAvatarActorFromActorInfo()->GetActorLocation();
-	
-	
 	GetAvatarActorFromActorInfo()->SetActorLocation(StartLocation+(BlinkDirection*BlinkDistance));
+}
+
+void UTLSBlinkSpell::HideCharacter(AActor* Actor, bool Hidden)
+{
+	const bool bIsServer = GetAvatarActorFromActorInfo()->HasAuthority();
+	if (!bIsServer) return;
+
+	Actor->SetActorHiddenInGame(Hidden);
 }

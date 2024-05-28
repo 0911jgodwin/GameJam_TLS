@@ -18,4 +18,7 @@ protected:
 
 	UFUNCTION(BlueprintCallable, Category = "Blink")
 	void BlinkCharacter(const FVector& BlinkTargetLocation, const float& BlinkDistance);
+	
+	UFUNCTION(BlueprintCallable, Category = "Blink")
+	void HideCharacter(AActor* Actor, bool Hidden);
 };

@@ -7,6 +7,7 @@
 #include "TLSProjectileSpell.generated.h"
 
 class ATLSProjectile;
+class UGameplayEffect;
 /**
  * 
  */
@@ -23,4 +24,7 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<ATLSProjectile> ProjectileClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };

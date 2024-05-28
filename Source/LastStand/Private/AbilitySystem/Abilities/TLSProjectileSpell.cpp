@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/Abilities/TLSProjectileSpell.h"
 #include "Actor/TLSProjectile.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 
 void UTLSProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -31,6 +33,9 @@ void UTLSProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocatio
 			Cast<APawn>(GetOwningActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-	//TODO: Give the Projectile a Gameplay Effect Spec for causing Damage.
+	const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+	const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, GetAbilityLevel(), SourceASC->MakeEffectContext());
+	Projectile->IgnoreTag = GetAvatarActorFromActorInfo()->ActorHasTag("Friendly") ? "Friendly" : "Enemy";
+	Projectile->DamageEffectSpecHandle = SpecHandle;
 	Projectile->FinishSpawning(SpawnTransform);
 }
