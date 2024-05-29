@@ -33,6 +33,16 @@ void ATLSEnemy::PossessedBy(AController* NewController)
 	TLSAIController->RunBehaviorTree(BehaviorTree);
 }
 
+void ATLSEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
+{
+	CombatTarget = InCombatTarget;
+}
+
+AActor* ATLSEnemy::GetCombatTarget_Implementation() const
+{
+	return CombatTarget;
+}
+
 void ATLSEnemy::BeginPlay()
 {
 	Super::BeginPlay();

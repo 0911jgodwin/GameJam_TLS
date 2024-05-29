@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/TLSCharacterBase.h"
+#include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "TLSEnemy.generated.h"
 
@@ -14,7 +15,7 @@ class ATLSAIController;
  * 
  */
 UCLASS()
-class LASTSTAND_API ATLSEnemy : public ATLSCharacterBase
+class LASTSTAND_API ATLSEnemy : public ATLSCharacterBase, public IEnemyInterface
 {
 	GENERATED_BODY()
 public:
@@ -32,6 +33,13 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Combat")
 	float LifeSpan = 5.f;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Combat")
+	TObjectPtr<AActor> CombatTarget;
+
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() const override;
+	
 protected:
 	virtual void BeginPlay() override;
 	virtual void InitAbilityActorInfo() override;
