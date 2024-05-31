@@ -45,6 +45,7 @@ AActor* ATLSEnemy::GetCombatTarget_Implementation() const
 void ATLSEnemy::Die()
 {
 	SetLifeSpan(LifeSpan);
+	if (TLSAIController) TLSAIController->GetBlackboardComponent()->SetValueAsBool(FName("Dead"), true);
 	Super::Die();
 }
 
