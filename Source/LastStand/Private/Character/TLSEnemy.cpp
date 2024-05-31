@@ -3,7 +3,6 @@
 
 #include "Character/TLSEnemy.h"
 #include "AbilitySystem/TLSAbilitySystemComponent.h"
-#include "AbilitySystem/TLSAbilitySystemLibrary.h"
 #include "AI/TLSAIController.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -41,6 +40,12 @@ void ATLSEnemy::SetCombatTarget_Implementation(AActor* InCombatTarget)
 AActor* ATLSEnemy::GetCombatTarget_Implementation() const
 {
 	return CombatTarget;
+}
+
+void ATLSEnemy::Die()
+{
+	SetLifeSpan(LifeSpan);
+	Super::Die();
 }
 
 void ATLSEnemy::BeginPlay()

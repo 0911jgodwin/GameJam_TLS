@@ -2,7 +2,6 @@
 
 
 #include "Character/TLSCharacterBase.h"
-#include "AbilitySystemComponent.h"
 #include "LastStand/LastStand.h"
 #include "AbilitySystem/TLSAbilitySystemComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -17,15 +16,26 @@ ATLSCharacterBase::ATLSCharacterBase()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Projectile, ECR_Overlap);
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 	GetMesh()->SetGenerateOverlapEvents(true);
-
-	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");
-	Weapon->SetupAttachment(GetMesh(), FName("WeaponHandSocket"));
-	Weapon->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 UAbilitySystemComponent* ATLSCharacterBase::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void ATLSCharacterBase::Die()
+{
+	MulticastHandleDeath();
+}
+
+void ATLSCharacterBase::MulticastHandleDeath_Implementation()
+{
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetEnableGravity(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ATLSCharacterBase::BeginPlay()
