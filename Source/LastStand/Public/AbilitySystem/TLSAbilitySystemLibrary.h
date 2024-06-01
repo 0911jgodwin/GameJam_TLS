@@ -18,6 +18,9 @@ public:
 	UFUNCTION(BlueprintPure, Category="TLSAbilitySystemLibrary|WidgetController")
 	static UOverlayWidgetController* GetOverlayWidgetController(const UObject* WorldContextObject);
 
+	UFUNCTION(BlueprintPure, Category="TLSAbilitySystemLibrary|PlayerController")
+	static APlayerController* GetPlayerController(const UObject* WorldContextObject);
+
 	UFUNCTION(BlueprintPure, Category = "TLSAbilitySystemLibrary|GameplayMechanics")
 	static bool IsNotFriend(AActor* FirstActor, AActor* SecondActor);
 	

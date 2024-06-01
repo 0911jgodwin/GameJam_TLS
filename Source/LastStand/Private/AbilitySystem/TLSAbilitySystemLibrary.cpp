@@ -23,6 +23,15 @@ UOverlayWidgetController* UTLSAbilitySystemLibrary::GetOverlayWidgetController(c
 	return nullptr;
 }
 
+APlayerController* UTLSAbilitySystemLibrary::GetPlayerController(const UObject* WorldContextObject)
+{
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(WorldContextObject, 0))
+	{
+		return PC;
+	}
+	return nullptr;
+}
+
 bool UTLSAbilitySystemLibrary::IsNotFriend(AActor* FirstActor, AActor* SecondActor)
 {
 	const bool bBothArePlayers = FirstActor->ActorHasTag(FName("Player")) && SecondActor->ActorHasTag(FName("Player"));
